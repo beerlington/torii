@@ -654,7 +654,7 @@ define("torii/providers/facebook-connect",
       return fbPromise;
     }
 
-    function fbLogin(){
+    function fbLogin(scope){
       return new Ember.RSVP.Promise(function(resolve, reject){
         FB.login(function(response){
           if (response.authResponse) {
@@ -662,7 +662,7 @@ define("torii/providers/facebook-connect",
           } else {
             Ember.run(null, reject, response.status);
           }
-        });
+        }, { scope: scope });
       });
     }
 
@@ -683,8 +683,7 @@ define("torii/providers/facebook-connect",
       // API:
       //
       open: function(){
-        return fbLoad( this.settings() )
-          .then(fbLogin)
+        return fbLogin(this.get('scope'))
           .then(fbNormalize);
       },
 
